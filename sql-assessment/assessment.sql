@@ -33,7 +33,7 @@ GROUP BY mp.geo
 ORDER BY total_conversions DESC
 LIMIT 1;
 
-### From this, Georgia generated the most converions.
+### From this, Georgia generated the most converions for this campaign
 
 
 ### 5.
@@ -41,19 +41,24 @@ SELECT camp.name AS campaign_name,
        SUM(wr.revenue) - SUM(mp.cost) AS efficiency
 FROM campaign_info camp
 JOIN marketing_performance mp ON camp.id = mp.campaign_id
-JOIN website_revenue wr ON camp.id = wr.campaign_id
+JOIN (
+    SELECT campaign_id, SUM(revenue) AS revenue
+    FROM website_revenue
+    GROUP BY campaign_id
+) wr ON camp.id = wr.campaign_id
 GROUP BY camp.name
-ORDER BY efficiency DESC
-LIMIT 1;
+ORDER BY efficiency DESC;
+
+### From this, I beleive that campaign 5 was the most efficent because it had the highest proft (revenue - cost) out of all the campaigns.
 
 
 ### BONUS
   
 SELECT DAYNAME(mp.date) AS day_of_week,
-       AVG(mp.clicks) AS avg_clicks
+       AVG(mp.clicks) AS average_clicks
 FROM marketing_performance mp
 GROUP BY day_of_week
-ORDER BY avg_clicks DESC
+ORDER BY average_clicks DESC
 LIMIT 1;
 
-### From this, I beleive that campaign 4 was the most efficent because it had the highest proft (revenue - cost) out of all the campaigns.
+### From this, I found that Wednesday has the highest number of average clicks which would make it the best day to run ads.
