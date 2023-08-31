@@ -12,6 +12,8 @@ GROUP BY state
 ORDER BY total_revenue DESC
 LIMIT 3;
 
+### From this, Ohio is the third best revenue genearting state.
+
 ### 3. 
 
 SELECT camp.name AS campaign_name,
@@ -31,6 +33,27 @@ GROUP BY mp.geo
 ORDER BY total_conversions DESC
 LIMIT 1;
 
+### From this, Georgia generated the most converions.
+
 
 ### 5.
-SELECT 
+SELECT camp.name AS campaign_name,
+       SUM(wr.revenue) - SUM(mp.cost) AS efficiency
+FROM campaign_info camp
+JOIN marketing_performance mp ON camp.id = mp.campaign_id
+JOIN website_revenue wr ON camp.id = wr.campaign_id
+GROUP BY camp.name
+ORDER BY efficiency DESC
+LIMIT 1;
+
+
+### BONUS
+  
+SELECT DAYNAME(mp.date) AS day_of_week,
+       AVG(mp.clicks) AS avg_clicks
+FROM marketing_performance mp
+GROUP BY day_of_week
+ORDER BY avg_clicks DESC
+LIMIT 1;
+
+### From this, I beleive that campaign 4 was the most efficent because it had the highest proft (revenue - cost) out of all the campaigns.
